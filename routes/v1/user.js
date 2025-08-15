@@ -10,7 +10,10 @@ const router = express.Router();
 
 router.route("/").get(authMiddelware, isAdminMiddelware, userController.getAll);
 
-router.route("/:id").delete(userController.removeUser);
+router.route("/role").put(authMiddelware, isAdminMiddelware, userController.changeRole);
+
+
+router.route("/:id").delete(authMiddelware, isAdminMiddelware, userController.removeUser);
 
 router
     .route("/ban/:id")
