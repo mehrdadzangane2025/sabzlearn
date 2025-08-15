@@ -8,7 +8,7 @@ const isAdminMiddelware = require("./../../middlewares/isAdmin.js");
 
 const router = express.Router();
 
-router.route("/").get(authMiddelware, isAdminMiddelware, userController.getAll);
+router.route("/").get(authMiddelware, isAdminMiddelware, userController.getAll).put(authMiddelware, userController.updateUser);
 
 router.route("/role").put(authMiddelware, isAdminMiddelware, userController.changeRole);
 

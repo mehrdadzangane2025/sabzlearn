@@ -50,5 +50,9 @@ exports.changeRole = async(req, res) => {
     const user = await userModel.findOne({ _id: id });
     const newRole = user.role === "ADMIN" ? "USER" : "ADMIN";
     await userModel.findOneAndUpdate({ _id: id }, { role: newRole });
-    return res.json({ message: `$info : username => ${user.username} && Role => changed to ${newRole}` });
+    return res.json({
+        message: `$info : username => ${user.username} && Role => changed to ${newRole}`,
+    });
 };
+
+exports.updateUser = async(req, res) => {};
