@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const multer = require("multer");
-const multerStorage = require("./../../utils/uploader.js");
+const { courseCover } = require("./../../utils/uploader.js");
 
 const authMiddelware = require("./../../middlewares/auth.js");
 const isAdminMiddelware = require("./../../middlewares/isAdmin.js");
@@ -10,17 +10,21 @@ const isAdminMiddelware = require("./../../middlewares/isAdmin.js");
 const courseController = require("./../../controllers/v1/course.js");
 
 router.route("/").post(
+    authMiddelware,
+    isAdminMiddelware,
     multer({
-        storage: multerStorage,
+        storage: courseCover,
         limits: {
             fileSize: 1000000000,
         },
     }).single("cover"),
-    authMiddelware,
-    isAdminMiddelware,
     courseController.create
-);
+).get(authMiddelware, isAdminMiddelware, courseController.getAll);
 // .get(courseController.getAll);
+
+router.route('/popular').get(courseController.popular)
+
+router.route('/presell').get(courseController.presell)
 
 router.route("/:href").get(authMiddelware, courseController.getOne);
 
@@ -46,7 +50,7 @@ router.route("/:href/:sessionID").get(courseController.getSessionInfo);
 
 router
     .route("/sessions")
-    .get(authMiddelware, isAdminMiddelware, courseController.getAll);
+    .get(authMiddelware, isAdminMiddelware, courseController.getAllSessions);
 
 router
     .route("/sessions/:id")

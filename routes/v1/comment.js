@@ -7,7 +7,7 @@ const isAdminMiddelware = require("../../middlewares/isAdmin.js");
 
 const router = express.Router();
 
-router.route("/").post(authMiddelware, commentsController.create);
+router.route("/").post(authMiddelware, commentsController.create).get(authMiddelware, isAdminMiddelware, commentsController.getAll);
 
 router
     .route("/:id")

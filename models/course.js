@@ -28,6 +28,8 @@ const schema = mongoose.Schema({
     status: {
         type: String,
         required: true,
+        enum: ["COMPELETE", "PRESELL", "RUNNING"],
+        default: "RUNNING",
     },
     discount: {
         type: Number,
@@ -41,6 +43,10 @@ const schema = mongoose.Schema({
     creator: {
         type: mongoose.Types.ObjectId,
         ref: "User",
+        required: true,
+    },
+    countUser: {
+        type: Number,
         required: true,
     },
 }, { timestamps: true });
