@@ -6,12 +6,13 @@ const { courseCover } = require("./../../utils/uploader.js");
 
 const authMiddelware = require("./../../middlewares/auth.js");
 const isAdminMiddelware = require("./../../middlewares/isAdmin.js");
+const isAdminOrTeacherMiddelware = require("./../../middlewares/isTeacherOrAdmin.js")
 
 const courseController = require("./../../controllers/v1/course.js");
 
 router.route("/").post(
     authMiddelware,
-    isAdminMiddelware,
+    isAdminOrTeacherMiddelware,
     multer({
         storage: courseCover,
         limits: {
@@ -19,7 +20,7 @@ router.route("/").post(
         },
     }).single("cover"),
     courseController.create
-).get(authMiddelware, isAdminMiddelware, courseController.getAll);
+).get(authMiddelware, isAdminOrTeacherMiddelware, courseController.getAll);
 // .get(courseController.getAll);
 
 router.route('/popular').get(courseController.popular)
@@ -30,7 +31,7 @@ router.route("/:href").get(authMiddelware, courseController.getOne);
 
 router
     .route("/:id")
-    .delete(authMiddelware, isAdminMiddelware, courseController.remove);
+    .delete(authMiddelware, isAdminOrTeacherMiddelware, courseController.remove);
 
 router.route("/:id/sessions").post(
     // multer({
@@ -46,15 +47,15 @@ router.route("/:id/sessions").post(
 router.route("/related/:href").get(courseController.getRelatedCourse);
 router.route("/category/:href").get(courseController.getCoursesByCategory);
 
-router.route("/:href/:sessionID").get(courseController.getSessionInfo);
-
 router
     .route("/sessions")
     .get(authMiddelware, isAdminMiddelware, courseController.getAllSessions);
 
 router
     .route("/sessions/:id")
-    .delete(authMiddelware, isAdminMiddelware, courseController.removeSession);
+    .delete(authMiddelware, isAdminOrTeacherMiddelware, courseController.removeSession);
+
+router.route("/:href/:sessionID").get(courseController.getSessionInfo);
 
 router.route("/:id/register").post(authMiddelware, courseController.register);
 

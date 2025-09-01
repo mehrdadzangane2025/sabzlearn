@@ -117,16 +117,43 @@ exports.getSessionInfo = async(req, res) => {
 };
 
 exports.removeSession = async(req, res) => {
-    const deletedCourse = await sessionModel.findOneAndDelete({
-        _id: req.params.id,
-    });
-    if (!deletedCourse) {
-        return res.status(404).json({
-            message: "Course not found!!!",
-        });
+    const isObjectIDValid = mongoose.Types.ObjectId.isValid(req.params.id);
+
+    if (!isObjectIDValid) {
+        return res.status(409).json({ message: "Course ID Not Valid!!" });
     }
 
-    return res.json(deletedCourse);
+    const findId = await sessionModel.findById(req.params.id).populate("course").lean();
+    if (!findId) {
+        return res.status(404).json({ message: "session not found!!" });
+
+    }
+
+    const findSession = await courseModel.findOne({ _id: findId.course._id }).populate("creator").lean();
+
+    if (!findSession) {
+        return res.status(404).json({ message: "course not found!!" });
+
+    }
+
+    let deletedSession;
+
+
+    if ((String(findSession.creator._id) == String(req.user._id)) || (String(req.user.role) == "ADMIN")) {
+
+        deletedSession = await sessionModel.findOneAndRemove({
+            _id: req.params.id,
+        });
+
+    } else {
+        return res.status(400).json({ message: "Course Not For You!!" });
+
+    }
+    if (!deletedSession) {
+        return res.status(404).json({ message: "course not found!!" });
+    }
+
+    return res.json(deletedSession);
 };
 
 exports.register = async(req, res) => {
@@ -215,9 +242,20 @@ exports.remove = async(req, res) => {
     if (!isObjectIDValid) {
         return res.status(409).json({ message: "Course ID Not Valid!!" });
     }
-    const deletedCourse = await courseModel.findOneAndRemove({
-        _id: req.params.id,
-    });
+
+    const findId = await courseModel.findById(req.params.id).populate("creator");
+    let deletedCourse;
+
+    if (String(findId.creator._id) == String(req.user._id) || String(findId.creator.role === "ADMIN")) {
+
+        deletedCourse = await courseModel.findOneAndRemove({
+            _id: req.params.id,
+        });
+
+    } else {
+        return res.status(400).json({ message: "Course Not For You!!" });
+
+    }
     if (!deletedCourse) {
         return res.status(404).json({ message: "course not found!!" });
     }
