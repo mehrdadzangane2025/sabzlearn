@@ -1,39 +1,22 @@
-const validator = require("fastest-validator");
+const yup = require("yup");
 
-const v = new validator();
+const { object, string, number, ref } = yup;
 
-const schema = {
-    name: {
-        type: "string",
-        min: 3,
-        max: 255,
-    },
-    username: {
-        type: "string",
-        min: 3,
-        max: 100,
-    },
-    email: {
-        type: "email",
-        min: 10,
-        max: 100,
-    },
-    password: {
-        type: "string",
-        min: 8,
-        max: 24,
-    },
-    phone: {
-        type: "string",
+let userSchema = object({
+    username: string().required(),
+    name: string().required(),
+    email: string().required(),
+    phone: number().required().positive().integer(),
+    password: string()
+        .required()
+        .min(8, "Password must be at least 8 characters")
+        .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+        .matches(/[0-9]/, "Password must contain at least one number"),
+    confirmPassword: string()
+        .required()
+        .oneOf([ref("password")], "Passwords must match"),
+});
 
-    },
-    confirmPassword: {
-        type: "equal",
-        field: "password",
-    },
-    $$strict: true,
-};
 
-const check = v.compile(schema);
 
-module.exports = check;
+module.exports = userSchema;

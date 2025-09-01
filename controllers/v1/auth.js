@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const registerValidator = require("./../../validators/register.js");
 
 exports.register = async(req, res) => {
-    const validationResult = registerValidator(req.body);
+    const validationResult = registerValidator.validate(req.body);
 
     if (validationResult !== true) {
         return res.status(422).json(validationResult);

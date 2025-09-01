@@ -1,6 +1,6 @@
 const express = require("express");
 
-const orderRouter = require("./routes/v1/order.js");
+const orderRouter = require("./routes/v1/order.js"); //**************** */
 
 const path = require("path");
 
@@ -60,6 +60,18 @@ app.use(
     express.static(path.join(__dirname, "public", "courses", "covers"))
 );
 
+/*
+app.get("/courses/covers/:filename", (req, res) => {
+    const fileName = req.params.filename;
+    const filePath = path.join(__dirname, "public", "courses", "covers", fileName);
+
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        res.status(404).send("File not found");
+    }
+});
+*/
 app.use(cors());
 
 module.exports = app;
