@@ -10,3 +10,10 @@ const schema = mongoose.Schema({
 const model = mongoose.model("Newsletter", schema);
 
 module.exports = model;
+
+
+/*
+module.exports = mongoose.model("Newsletter", new mongoose.Schema({
+  email: { type: String, required: true },
+}, { timestamps: true }));
+*/
