@@ -17,6 +17,13 @@ exports.create = async(req, res) => {
     req.files.forEach(n => cover.push(n.filename));
 
 
+    const hrefRepeat = await articleModel.findOne({ href });
+    if (hrefRepeat) {
+        return res.status(409).json({ message: "href is used!" });
+    }
+
+
+
     const createArticle = await articleModel.create({
         title,
         description,
