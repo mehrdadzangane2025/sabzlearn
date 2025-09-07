@@ -1,4 +1,4 @@
-const contactModel = require("./../../models/contact.js");
+const contactModel = require("../../models/contact.js");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 

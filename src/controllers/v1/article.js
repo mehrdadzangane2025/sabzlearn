@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const commentModel = require("./../../models/comment.js");
-const buildCommentTree = require("./../../utils/commentbuild.js");
-const articleModel = require("./../../models/article.js");
+const commentModel = require("../../models/comment.js");
+const buildCommentTree = require("../../utils/commentbuild.js");
+const articleModel = require("../../models/article.js");
 
 exports.getAll = async(req, res) => {
     const allArticle = await articleModel.find({}).lean();
@@ -19,7 +19,7 @@ exports.create = async(req, res) => {
 
     const hrefRepeat = await articleModel.findOne({ href });
     if (hrefRepeat) {
-        return res.status(409).json({ message: "href is used!" });
+        return res.status(409).json({ message: "this href already exist!" });
     }
 
 

@@ -1,9 +1,9 @@
 const express = require("express");
 
-const authMiddelware = require("./../../middlewares/auth.js");
+const authMiddelware = require("../../middlewares/auth.js");
 const isAdminMiddelware = require("../../middlewares/isAdmin.js");
 
-const contactController = require("./../../controllers/v1/contact.js");
+const contactController = require("../../controllers/v1/contact.js");
 
 const router = express.Router();
 

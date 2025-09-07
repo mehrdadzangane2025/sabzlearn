@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("./../models/user.js");
+const userModel = require("../src/models/user.js");
 
 module.exports = async(req, res, next) => {
     // prettier-ignore
